@@ -60,7 +60,7 @@ Go to Settings > Pages.
 
 Select the main branch and click Save.
 
-The tool will be live at https://yourusername.github.io/your-repo-name/.
+This tool will be live at https://abhiop144.github.io/password_analyser_project/.
 
 🛠️ Built With
 
