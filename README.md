@@ -1,7 +1,21 @@
-# password_analyser_project
-🛡️ Cyber Carnival: Password Security Analyzer
+# 🛡️ Cyber Carnival: Password Security Analyzer
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-yellow)
+![Color Feedback](https://img.shields.io/badge/Dynamic-Color%20Feedback-orange)
+![Entropy](https://img.shields.io/badge/Entropy-Based-Strength-blue)
+![Crack Time](https://img.shields.io/badge/Crack%20Time-Estimation-red)
+![Character Analysis](https://img.shields.io/badge/Character%20Class-Analysis-purple)
+![Security Suggestions](https://img.shields.io/badge/Actionable-Security%20Tips-green)
+![Privacy First](https://img.shields.io/badge/Privacy-Local%20Processing-lightgrey)
 
-A high-performance, real-time password security evaluation tool built with Vanilla JavaScript and Tailwind CSS. This application follows a "Cyber Carnival" methodology to provide users with deep insights into their password's mathematical strength and vulnerability to modern brute-force attacks.
+
+*Presented to the judges and various students present at VIT BHOPAL UNIVERSITY FOR CYBER CARNIVAL HACKATHON*  
+*TEAM MEMBER NAMES*
+*(TEAM LEADER) YUGAL SINGH RAO*
+*(TEAM MEMBER) PUSHKAR BANJARA*
+*(TEAM MEMBER) ARYAN KUMAR*
+*(TEAM MEMBER) ABHINAV MAHESH PATIL*
+
+**An interactive web application that analyzes password strength in real-time using entropy calculations, character set analysis, and estimated crack times. Applying the cybersecurity concepts and learn how  to create strong passwords!**
 
 ✨ Key Features
 
