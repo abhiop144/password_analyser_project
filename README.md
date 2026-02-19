@@ -23,7 +23,7 @@ Since this is a self-contained application, no complex installation is required.
 
 Clone or Download:
 
-git clone [https://github.com/abhiop144/password-security-analyzer.git](https://github.com/abhiop144/password-security-analyzer.git)
+git clone [https://github.com/abhiop144/password_analyser_project.git](https://github.com/abhiop144/password_analyser_project.git)
 
 
 Open:
