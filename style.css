@@ -1,0 +1,41 @@
+/* CUSTOM STYLES 
+    Handles font imports and specific animations 
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    /* Deep purple gradient for the 'Cyber' vibe */
+    background: linear-gradient(135deg, #1a1c2c 0%, #4a1942 100%);
+    min-height: 100vh;
+}
+
+/* Glass effect for the card */
+.main-card {
+    background: rgba(186, 4, 4, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Strength bar movement animation */
+.strength-bar {
+    transition: width 0.5s ease, background-color 0.3s ease;
+}
+
+/* Checklist item state transitions */
+.check-item {
+    transition: all 0.3s ease;
+}
+
+/* Green state for met requirements */
+.item-done {
+    color: #4ade80;
+    opacity: 1;
+}
+
+/* Muted state for unmet requirements */
+.item-todo {
+    color: #94a3b8;
+    opacity: 0.6;
+}
