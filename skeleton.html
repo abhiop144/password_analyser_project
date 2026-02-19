@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Password Checker</title>
+    
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Using Tailwind CSS for layout and spacing -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center p-4">
+
+    <div class="container max-w-md w-full">
+        <!-- The main box using the 'main-card' class from style.css -->
+        <div class="main-card rounded-2xl p-8 shadow-2xl text-white">
+            
+            <!-- Header Section -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-12 h-1 bg-yellow-400 mb-2 rounded-full"></div>
+                <h1 class="text-2xl font-bold uppercase tracking-wide">Password STRENGTH ANALYZER</h1>
+                <p class="text-slate-400 text-sm">TEAM WHISPER</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Password Input Area -->
+                <div class="relative">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Type Password Here</label>
+                    <input type="password" id="passwordInput" 
+                        class="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                        placeholder="••••••••">
+                    
+                    <!-- Button to toggle password visibility -->
+                    <button id="toggleBtn" class="absolute right-3 top-9 text-slate-500 hover:text-white">
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Strength Progress Bar -->
+                <div>
+                    <div class="flex justify-between items-end mb-2">
+                        <span id="strengthLabel" class="text-sm font-bold text-slate-400">Strength: Waiting...</span>
+                        <span id="scoreText" class="text-[10px] text-slate-500">Score: 0</span>
+                    </div>
+                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <!-- This div grows and changes color based on script.js -->
+                        <div id="barFill" class="strength-bar h-full w-0 bg-slate-600"></div>
+                    </div>
+                </div>
+
+                <!-- Requirement Checklist -->
+                <div class="grid grid-cols-2 gap-2 py-4 border-y border-slate-800">
+                    <div id="c-len" class="check-item item-todo text-[11px] flex items-center">● 8+ Letters</div>
+                    <div id="c-up" class="check-item item-todo text-[11px] flex items-center">● Capital Letter</div>
+                    <div id="c-low" class="check-item item-todo text-[11px] flex items-center">● Small Letter</div>
+                    <div id="c-num" class="check-item item-todo text-[11px] flex items-center">● Number</div>
+                    <div id="c-spec" class="check-item item-todo text-[11px] flex items-center">● Special Symbol</div>
+                </div>
+
+                <!-- Time Estimate Result -->
+                <div class="bg-black/20 rounded-lg p-4 border border-slate-800/50 text-center">
+                    <h3 class="text-[10px] font-bold text-slate-500 uppercase mb-1">Time to Guess</h3>
+                    <p id="timeText" class="text-xl font-bold text-yellow-500">Instantly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to your logic file (placed at bottom to ensure HTML loads first) -->
+    <script src="script.js"></script>
+</body>
+</html>
