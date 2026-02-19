@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Carnival | Password Security Analyzer</title>
+    <!-- 
+        CYBER CARNIVAL - SECURITY IMPLEMENTATION TOOL
+        Purpose: Real-time password strength analysis and brute-force estimation.
+        Design: Modern Cyberpunk/High-Tech UI using Tailwind CSS.
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Using a deep dual-tone gradient to match the Cyber Carnival branding */
+            background: linear-gradient(135deg, #1a1c2c 0%, #4a1942 100%);
+            min-height: 100vh;
+        }
+
+        /* Frosted glass effect for the main container */
+        .cyber-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Smooth transitions for the progress bar and checklist items */
+        .strength-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+
+        .check-item {
+            transition: all 0.3s ease;
+        }
+
+        .check-item.met {
+            color: #4ade80; /* Green-400 */
+            opacity: 1;
+        }
+
+        .check-item.unmet {
+            color: #94a3b8; /* Slate-400 */
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+    <div class="container max-w-md w-full">
+        <!-- Main Application Card -->
+        <div class="cyber-card rounded-2xl p-8 shadow-2xl text-white">
+            
+            <!-- Header Section -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-16 h-1 bg-yellow-400 mb-2 rounded-full"></div>
+                <h1 class="text-2xl font-bold tracking-tight uppercase">Cyber Carnival</h1>
+                <p class="text-slate-400 text-sm">Security Implementation: Phase 4</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Input Section: Password entry with visibility toggle -->
+                <div class="relative">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-2 tracking-wider">Password Entry</label>
+                    <input type="password" id="passwordInput" 
+                        class="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all"
+                        placeholder="Enter your password">
+                    <button id="toggleVisibility" class="absolute right-3 top-9 text-slate-500 hover:text-white transition-colors">
+                        <!-- SVG Eye Icon -->
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Strength Meter: Dynamic bar and entropy bits counter -->
+                <div>
+                    <div class="flex justify-between items-end mb-2">
+                        <span id="strengthText" class="text-sm font-bold uppercase tracking-widest text-slate-400">Security: Idle</span>
+                        <span id="entropyText" class="text-[10px] text-slate-500 font-mono">0 bits</span>
+                    </div>
+                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <div id="strengthBar" class="strength-bar h-full w-0 bg-slate-600"></div>
+                    </div>
+                </div>
+
+                <!-- Requirement Checklist: Visual cues for password complexity -->
+                <div class="grid grid-cols-2 gap-2 py-4 border-y border-slate-800">
+                    <div id="check-length" class="check-item unmet flex items-center text-[11px] font-medium">
+                        <span class="mr-2">●</span> 8+ Characters
+                    </div>
+                    <div id="check-upper" class="check-item unmet flex items-center text-[11px] font-medium">
+                        <span class="mr-2">●</span> Uppercase
+                    </div>
+                    <div id="check-lower" class="check-item unmet flex items-center text-[11px] font-medium">
+                        <span class="mr-2">●</span> Lowercase
+                    </div>
+                    <div id="check-number" class="check-item unmet flex items-center text-[11px] font-medium">
+                        <span class="mr-2">●</span> Number
+                    </div>
+                    <div id="check-special" class="check-item unmet flex items-center text-[11px] font-medium">
+                        <span class="mr-2">●</span> Special Char
+                    </div>
+                </div>
+
+                <!-- Brute Force Estimation: Displays time based on probability -->
+                <div class="bg-black/20 rounded-lg p-4 border border-slate-800/50">
+                    <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Estimated Crack Time</h3>
+                    <p id="crackTime" class="text-xl font-bold text-yellow-500 font-mono">Instantly</p>
+                    <p class="text-[9px] text-slate-600 mt-1 italic">Based on standard hardware brute-force estimation.</p>
+                </div>
+            </div>
+
+            <!-- Footer Methodology Tracking -->
+            <p class="mt-8 text-center text-[10px] text-slate-500">Methodology Version 1.0.4 | Secure Implementation</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Element Selectors
+        const input = document.getElementById('passwordInput');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        const entropyText = document.getElementById('entropyText');
+        const crackTimeDisplay = document.getElementById('crackTime');
+        const toggleBtn = document.getElementById('toggleVisibility');
+
+        // Requirements Checklist UI mapping
+        const checks = {
+            length: document.getElementById('check-length'),
+            upper: document.getElementById('check-upper'),
+            lower: document.getElementById('check-lower'),
+            number: document.getElementById('check-number'),
+            special: document.getElementById('check-special')
+        };
+
+        /**
+         * Toggles the input field between 'password' (hidden) and 'text' (visible)
+         */
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+        });
+
+        /**
+         * Core Analysis Loop: Runs on every keystroke
+         */
+        input.addEventListener('input', () => {
+            const pwd = input.value;
+            
+            // 1. Validation: Regex patterns for different character types
+            const results = {
+                length: pwd.length >= 8,
+                upper: /[A-Z]/.test(pwd),
+                lower: /[a-z]/.test(pwd),
+                number: /[0-9]/.test(pwd),
+                special: /[^A-Za-z0-9]/.test(pwd)
+            };
+
+            // 2. Update Checklist UI: Toggle classes based on met/unmet conditions
+            Object.keys(results).forEach(key => {
+                if (results[key]) {
+                    checks[key].classList.replace('unmet', 'met');
+                } else {
+                    checks[key].classList.replace('met', 'unmet');
+                }
+            });
+
+            // 3. Entropy Calculation (Information Theory)
+            // We determine the size of the "pool" of characters the user is drawing from.
+            let charsetSize = 0;
+            if (results.lower) charsetSize += 26;   // Lowercase alphabet
+            if (results.upper) charsetSize += 26;   // Uppercase alphabet
+            if (results.number) charsetSize += 10;  // Digits 0-9
+            if (results.special) charsetSize += 32; // Standard special symbols
+
+            // Formula: Entropy = log2(charset_size ^ password_length)
+            const entropy = pwd.length > 0 ? Math.log2(Math.pow(charsetSize, pwd.length)) : 0;
+            entropyText.innerText = `${Math.floor(entropy)} bits`;
+
+            // 4. Brute Force Estimation Logic
+            // We assume a powerful attacker capable of 100 Billion (10^11) guesses per second.
+            const guessesPerSecond = 100000000000;
+            const totalGuesses = Math.pow(charsetSize || 1, pwd.length);
+            const secondsToCrack = totalGuesses / guessesPerSecond;
+
+            updateCrackTime(secondsToCrack, pwd.length);
+            updateStrengthBar(entropy, results);
+        });
+
+        /**
+         * Converts raw seconds into human-readable time durations
+         * @param {number} seconds - Calculated time to crack the password
+         * @param {number} len - Current length of the password string
+         */
+        function updateCrackTime(seconds, len) {
+            if (len === 0) {
+                crackTimeDisplay.innerText = "Instantly";
+                return;
+            }
+
+            if (seconds < 1) {
+                crackTimeDisplay.innerText = "Instantly";
+            } else if (seconds < 60) {
+                crackTimeDisplay.innerText = `${Math.floor(seconds)} Seconds`;
+            } else if (seconds < 3600) {
+                crackTimeDisplay.innerText = `${Math.floor(seconds / 60)} Minutes`;
+            } else if (seconds < 86400) {
+                crackTimeDisplay.innerText = `${Math.floor(seconds / 3600)} Hours`;
+            } else if (seconds < 31536000) {
+                crackTimeDisplay.innerText = `${Math.floor(seconds / 86400)} Days`;
+            } else if (seconds < 31536000000) {
+                crackTimeDisplay.innerText = `${Math.floor(seconds / 31536000)} Years`;
+            } else {
+                crackTimeDisplay.innerText = "Centuries+";
+            }
+        }
+
+        /**
+         * Updates the visual strength bar and descriptive text based on entropy bits
+         * @param {number} entropy - The calculated bits of information
+         * @param {object} results - The results of individual requirement checks
+         */
+        function updateStrengthBar(entropy, results) {
+            let color = '#ef4444'; // Default Red
+            let label = 'Critical';
+            let width = '10%';
+
+            // NIST / Industry standard categories for entropy strength
+            if (entropy > 0) {
+                if (entropy < 40) {
+                    color = '#ef4444'; // Red
+                    label = 'Weak';
+                    width = '25%';
+                } else if (entropy < 60) {
+                    color = '#f59e0b'; // Amber
+                    label = 'Medium';
+                    width = '50%';
+                } else if (entropy < 80) {
+                    color = '#10b981'; // Emerald
+                    label = 'Strong';
+                    width = '75%';
+                } else {
+                    color = '#3b82f6'; // Blue
+                    label = 'Military Grade';
+                    width = '100%';
+                }
+            } else {
+                color = '#475569'; // Slate
+                label = 'Idle';
+                width = '0%';
+            }
+
+            // Update UI elements
+            strengthBar.style.width = width;
+            strengthBar.style.backgroundColor = color;
+            strengthText.innerText = `Security: ${label}`;
+            strengthText.style.color = color;
+        }
+    </script>
+</body>
+</html>
